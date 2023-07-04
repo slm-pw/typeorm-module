@@ -26,7 +26,7 @@ module.exports = async (settings) => {
             ...settings,
             db: {
                 type: "sqlite",
-                database: `${__dirname}/db.sqlite`,
+                database: `${__dirname}/../../cache/db.sqlite`,
                 entities: [ ...(await getEntities()) ],
                 logging: true,
                 ...settings.db
@@ -36,7 +36,7 @@ module.exports = async (settings) => {
         clientMixin: (client) => {
             client.db = new typeorm.DataSource(settings.db)
             client.db.initialize().then(() => {
-                client.emmit('typeOrmReady')
+                client.emit('typeOrmReady')
             })
         },
         intents: 0
