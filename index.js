@@ -20,7 +20,7 @@ async function getEntities() {
     return entities
 }
 
-module.exports = function(settings) {
+module.exports = (settings) => {
     
         settings = {
             ...settings,
