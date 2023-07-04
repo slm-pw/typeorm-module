@@ -20,14 +20,14 @@ async function getEntities() {
     return entities
 }
 
-module.exports = (settings) => {
+module.exports = async (settings) => {
     
         settings = {
             ...settings,
             db: {
                 type: "sqlite",
                 database: `${__dirname}/db.sqlite`,
-                entities: [ ...getEntities() ],
+                entities: [ ...(await getEntities()) ],
                 logging: true,
                 ...settings.db
             },
