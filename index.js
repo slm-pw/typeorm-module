@@ -6,6 +6,7 @@ async function getEntities() {
     let entities = []
     let files = fs.readdirSync(`${__dirname}/..`)
     for (let file of files) {
+        if (!fs.existsSync(`${__dirname}/../${file}/entities`)) continue
         if (fs.lstatSync(`${__dirname}/../${file}`).isDirectory()) {
             let folderFiles = fs.readdirSync(`${__dirname}/../${file}/entities`)
             for (let folderFile of folderFiles) {
@@ -20,20 +21,24 @@ async function getEntities() {
 }
 
 module.exports = function(settings) {
-    settings = {
-        ...settings,
-        db: {
-            type: "sqlite",
-            database: `${__dirname}/db.sqlite`,
-            entities: [ ...getEntities() ],
-            logging: true,
-            ...settings.db
-          },
-    }
-    clientMixin: (client) => {
-        client.db = new typeorm.DataSource(settings.db)
-        client.db.initialize().then(() => {
-            client.emmit('typeOrmReady')
-        })
+    
+        settings = {
+            ...settings,
+            db: {
+                type: "sqlite",
+                database: `${__dirname}/db.sqlite`,
+                entities: [ ...getEntities() ],
+                logging: true,
+                ...settings.db
+            },
+        }
+    return {
+        clientMixin: (client) => {
+            client.db = new typeorm.DataSource(this.settings.db)
+            client.db.initialize().then(() => {
+                client.emmit('typeOrmReady')
+            })
+        },
+        intents: 0
     }
 }
