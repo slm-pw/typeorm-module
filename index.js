@@ -34,7 +34,7 @@ module.exports = async (settings) => {
         }
     return {
         clientMixin: (client) => {
-            client.db = new typeorm.DataSource(this.settings.db)
+            client.db = new typeorm.DataSource(settings.db)
             client.db.initialize().then(() => {
                 client.emmit('typeOrmReady')
             })
